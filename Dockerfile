@@ -32,12 +32,8 @@ RUN pip3 install SQLAlchemy
 RUN pip3 install psycopg2
 RUN pip3 install jsonmodel
 RUN pip3 install labpack
-
-# Install Localtunnel
-RUN apk add nodejs@community
-RUN apk add nodejs-npm
-RUN npm install -g localtunnel
-# RUN npm install -g uglify-js
+RUN pip3 install paho-mqtt
+RUN pip3 install flask-cors
 
 # Clean APK cache
 RUN rm -rf /var/cache/apk/*

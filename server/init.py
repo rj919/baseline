@@ -3,20 +3,6 @@ __created__ = '2016.11'
 __license__ = 'MIT'
 
 '''
-Dependencies
-pip install apscheduler
-pip install requests
-pip install flask
-pip install gevent
-pip install gunicorn
-pip install Flask-APScheduler
-pip install sqlalchemy
-pip install psycopg2
-pip install jsonmodel
-pip install labpack
-'''
-
-'''
 APScheduler Documentation
 https://apscheduler.readthedocs.io/en/latest/index.html
 
@@ -34,7 +20,12 @@ http://flask.pocoo.org/docs/0.11/deploying/wsgi-standalone/#gevent
 
 # construct flask app object
 from flask import Flask
-app = Flask(import_name=__name__)
+flask_kwargs = {
+    'import_name': __name__,
+    'static_folder': 'public',
+    'template_folder': 'views'
+}
+app = Flask(**flask_kwargs)
 
 # initialize logging and debugging
 import sys

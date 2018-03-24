@@ -11,6 +11,10 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from server.init import app, ap_scheduler
 from flask import request, session, jsonify, url_for, render_template
 
+# add cross origin support
+from flask_cors import CORS, cross_origin
+CORS(app)
+
 # construct the landing page
 from labpack.records.settings import load_settings
 api_model = load_settings('models/api-model.json')

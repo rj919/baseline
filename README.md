@@ -1,5 +1,5 @@
-# flaskScheduler 
-_A Job Scheduler using Flask & APScheduler on Alpine & Gunicorn inside Docker_  
+# flaskAPI 
+_A RESTful API using Flask & APScheduler on Alpine & Gunicorn inside Docker_  
 **by [Collective Acuity](http://collectiveacuity.com)**
 
 ## Features
@@ -67,30 +67,6 @@ By default, the scheduler uses a gevent process to manage threads and jobs will 
 A copy of the scheduler.yaml file is included in the notes folder. If you are using the pocketLab management tool, it will automatically add any values to the environmental variables which are declared in cred/scheduler.yaml. Further details about the different settings can be found with the [Apscheduler Documentation](https://apscheduler.readthedocs.io/en/latest/index.html)
  
 ## Launch Commands
-**start.sh**  
-_Creates container with required volumes and starts flask on a gunicorn server_  
-Requires:  
-
-- Container Alias
-- Container Ports
-- Mapped Volumes
-- Initial Command
-- Container Root Folder Name (if AWS EC2 deployment with awsDocker module)
-- Virtualbox Name (if Windows or Mac localhost)
-
-**rebuild.sh**  
-_Initiates an automated build command on Docker to update base image_  
-Requires:  
-
-- Container Alias
-- Token from Docker Build Settings
-- Environment Variable File (in cred/docker.yaml)
-
-**tunnel.sh**  
-_Initiates a secure tunnel from local device to endpoint on localtunnel.me_  
-Requires:  
-
-- Container Alias
 
 ## Collaboration Notes
 _The Git and Docker repos contain all the configuration information required for collaboration except access tokens. To synchronize access tokens across multiple devices, platforms and users without losing local control, you can use LastPass, an encrypted email platform such as ProtonMail or smoke signals. If you use any AWS services, use AWS IAM to assign user permissions and create keys for each collaborator individually. Collaborators are required to install all service dependencies on their local device if they wish to test code on their localhost. A collaborate should always **FORK** the repo from the main master and fetch changes from the upstream repo so reality is controlled by one admin responsible for approving all changes. New dependencies should be added to the Dockerfile, **NOT** to the repo files. Collaborators should test changes to Dockerfile locally before making a pull request to merge any new dependencies:_  

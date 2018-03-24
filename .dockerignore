@@ -1,3 +1,5 @@
+#################  .dockerignore  #################
+
 # IDE Files
 .idea
 .gitignore
@@ -13,3 +15,12 @@ data/
 /notes/
 /*.sh
 
+#################    IDE files    #################
+.DS_STORE
+.netbeans
+nbproject
+.node_history
+__pycache__
+
+################# version control #################
+.hg
