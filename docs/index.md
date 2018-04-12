@@ -1,5 +1,5 @@
-# api
-_A Brand New Python Module_  
+# flaskAPI
+_A RESTful API using Flask  APScheduler on Alpine  Gunicorn inside Docker_  
 by [Collective Acuity](http://collectiveacuity.com)
 
 <table>

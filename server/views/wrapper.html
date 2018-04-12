@@ -3,14 +3,15 @@
 <head>
     {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/bootstrap.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/lab.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/lab.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/simple-line-icons.css') }}" type="text/css">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     {% block link %}{% endblock %}
     <meta charset="UTF-8">
     <meta name="lab-context" content="placeholder">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {% block meta %}{% endblock %}
-    <title>{% block title %}Collective Acuity : Scheduler Documentation{% endblock %}</title>
+    <title>{{ title }}{% block subtitle %}{% endblock %}</title>
     {% endblock %}
 </head>
 <body>
@@ -20,7 +21,14 @@
     {% endblock %}
 
     <!-- Javascript Block -->
-    {% block javascript %}{% endblock %}
+    {% block javascript %}
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/jquery-3.1.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/sprintf.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/stackoverflow.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/lab.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/views.js') }}"></script>
+    {% endblock %}
 
   </body>
 </html>

@@ -15,7 +15,7 @@ _A RESTful API using Flask & APScheduler on Alpine & Gunicorn inside Docker_
 
 ## Components
 - Alpine Edge (OS)
-- Python 3.5.2 (Environment)
+- Python 3.6.3 (Environment)
 - Gunicorn 19.4.5 (Server)
 - Flask 0.11.1 (Framework)
 - APScheduler 3.2.0 (Scheduler)
