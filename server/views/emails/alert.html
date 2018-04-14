@@ -1,0 +1,13 @@
+{% extends "emails/wrapper.html" %}
+{% block body %}
+<table style="width:600px;margin-left:auto;margin-right:auto;padding-left:20px;padding-right:20px;padding-bottom:20px;color:#333332;line-height:1.4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Ubuntu','Open Sans','Helvetica Neue',sans-serif">
+    <tbody>
+        <tr><td>
+            <p style="margin-top:0;margin-bottom:20px">Recently, we noticed activity by your {{ title }} account. To review your recent activity, you can click:</p>
+            <p style="margin-top:0;margin-bottom:20px"><a href="{{ base_url }}" style="color:#337ab7;text-decoration:none;display:inline-block;height:38px;line-height:38px;padding-top:0;padding-right:16px;padding-bottom:0;padding-left:16px;outline:0;background-color:#ffffff;font-size:14px;font-style:normal;font-weight:400;text-align:center;white-space:nowrap;border:.1em solid #337ab7;border-radius:.2em;cursor:pointer;" target="_blank">View Activity</a></p>
+            <p><small>Or you can use this link:</small></p>
+            <p style="margin-top:0;margin-bottom:20px"><a href="{{ base_url }}" style="color:#333332" target="_blank">{{ base_url }}</a></p>
+        </td></tr>
+    </tbody>
+</table>
+{% endblock %}

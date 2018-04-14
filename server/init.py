@@ -11,6 +11,26 @@ flask_kwargs = {
 }
 app = Flask(**flask_kwargs)
 
+# define flask environments
+class flaskDev(object):
+    LAB_SECRET_KEY = ''
+    LAB_SERVER_PROTOCOL = 'http'
+    LAB_SERVER_DOMAIN = 'localhost'
+    LAB_SERVER_PORT = 5001
+    LAB_SERVER_LOGGING = 'DEBUG'
+class flaskProd(object):
+    LAB_SECRET_KEY = ''
+    LAB_SERVER_PROTOCOL = 'https'
+    LAB_SERVER_DOMAIN = 'api.collectiveacuity.com'
+    LAB_SERVER_PORT = 5001
+    LAB_SERVER_LOGGING = 'INFO'
+
+# select flask config from system environment
+if system_environment == 'dev':
+    flask_app.config.from_object(flaskDev)
+else:
+    flask_app.config.from_object(flaskProd)
+    
 # initialize logging and debugging
 import sys
 import logging
@@ -41,7 +61,7 @@ scheduler_configuration = {
 }
 
 # adjust scheduler configuration settings based upon envvar
-from server.utils import config_scheduler
+from server.methods.scheduler import config_scheduler
 from labpack.records.settings import ingest_environ
 scheduler_settings = ingest_environ('models/scheduler-model.json')
 envvar_configuration = config_scheduler(scheduler_settings)

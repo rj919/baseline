@@ -3,10 +3,13 @@ _A RESTful API using Flask & APScheduler on Alpine & Gunicorn inside Docker_
 **by [Collective Acuity](http://collectiveacuity.com)**
 
 ## Features
-- Flask APScheduler in a Container
+- REST API architecture
+- Auto-generated API endpoints
+- Auto-generated API documentation
+- Permission control using JWT
+- APScheduler support
+- WebClient framework
 - REST API Client
-- Built-in Requests Functionality
-- Postgres Database Connector
 - Configuration by Environmental Variables
 - Lean Footprint
 
@@ -30,7 +33,7 @@ _A RESTful API using Flask & APScheduler on Alpine & Gunicorn inside Docker_
 - Dropbox (Sync, Backup)
 
 ## Languages
-- Python 3.5
+- Python 3.6
 
 ## Setup DevEnv
 1. Install Docker Toolbox on Local Device
@@ -39,22 +42,13 @@ _A RESTful API using Flask & APScheduler on Alpine & Gunicorn inside Docker_
 4. Create a /cred Folder in Root to Sensitive Store Tokens
 5. **[Optional]** Create a New Private Remote Repository
 
-## Server Sub-Folders 
+## Server Sub-Folders
+-- _assets/_ (sub-folder for common design elements) 
 -- _models/_ (sub-folder for data object model declarations)
--- _static/_ (sub-folder for public accessible application content)
--- _templates/_ (sub-folder for jinja html templates)  
+-- _public/_ (sub-folder for public accessible application content)
+-- _views/_ (sub-folder for jinja html templates)  
 
-## Build Configurations
-flaskScheduler is built with a number of immutable configurations:
-
-- Views have been enabled to allow the **REST API** client
-- All scheduled jobs must use the **UTC timezone**
-- Dates for jobs must be passed in **ISO Format** with +00:00 timezone
-- Only **one execution process** type may be selected
-- Only **one job store** may be used to persist schedule data
-- Only a **Postgres** database may be selected as a job store
-
-## Mutable Settings
+## Scheduler Configuration
 By default, the scheduler uses a gevent process to manage threads and jobs will be stored in local memory. The launch script checks for new configuration settings in the environmental variables. Any of the following settings can be adjusted (case-insensitive):
 
 - scheduler_job_store_user: postgres
@@ -64,7 +58,7 @@ By default, the scheduler uses a gevent process to manage threads and jobs will 
 - scheduler_job_defaults_coalesce: true
 - scheduler_job_defaults_max_instances: 1
 
-A copy of the scheduler.yaml file is included in the notes folder. If you are using the pocketLab management tool, it will automatically add any values to the environmental variables which are declared in cred/scheduler.yaml. Further details about the different settings can be found with the [Apscheduler Documentation](https://apscheduler.readthedocs.io/en/latest/index.html)
+A copy of the scheduler.yaml file is included in the notes folder. If you are using the pocketLab management tool, lab init will automatically copy the placeholder values to cred/scheduler.yaml. Further details about the different settings can be found with the [Apscheduler Documentation](https://apscheduler.readthedocs.io/en/latest/index.html)
  
 ## Launch Commands
 

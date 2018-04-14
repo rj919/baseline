@@ -411,7 +411,7 @@ function openDocumentation(div_id='') {
     
 // retrieve documentation
     requestingResource({
-        route: '/docs',
+        route: '/api/v1',
         method: 'GET'
     }).done(function(response){
         logConsole(response)

@@ -30,10 +30,18 @@ def landing_page():
     ''' landing page route '''
     return render_template('dashboard.html', **landing_kwargs), 200
 
-@app.route('/docs')
-def docs_route():
+@app.route('/api/v1')
+def api_v1_route():
     ''' docs page route '''
     return jsonify(api_model), 200
+
+@app.route('/api/v1/<resource_type>', methods=['GET','POST'])
+def api_v1_resource_route(resource_type=''):
+    pass
+
+@app.route('/api/v1/<resource_type>/<resource_id>', methods=['GET','PUT','PATCH','DELETE'])
+def api_v1_resource_id_route(resource_type='', resource_id=''):
+    pass
 
 # construct the catchall for URLs which do not exist
 @app.errorhandler(404)

@@ -1,6 +1,6 @@
 __author__ = 'rcj1492'
-__created__ = '2016.10'
-__license__ = 'MIT'
+__created__ = '2018.04'
+__license__ = '©2018 Collective Acuity'
 
 def config_scheduler(scheduler_settings=None):
 
@@ -51,23 +51,12 @@ def config_scheduler(scheduler_settings=None):
 
     return scheduler_configs
 
-def handle_request(url, job_details):
-    import requests
-    try:
-        status_details = requests.post(url, json=job_details)
-    except:
-        from labpack.handlers.requests import handle_requests
-        request_object = requests.Request(url=url, json=job_details)
-        status_details = handle_requests(request_object)
-        from server.init import app
-        if status_details['error']:
-            app.logger.debug(status_details['error'])
-    return status_details
-
 if __name__ == '__main__':
+
+# test config scheduler
     import os
-    os.environ['scheduler_job_store_pass'] = 'test_pass'
-    model_path = 'models/scheduler-model.json'
+    os.environ['SCHEDULER_JOB_STORE_PASS'] = 'test_pass'
+    model_path = '../models/scheduler-model.json'
     from labpack.records.settings import load_settings, ingest_environ
     settings_model = load_settings(model_path)
     assert settings_model['schema']['scheduler_job_store_user'] == 'postgres'
@@ -76,14 +65,3 @@ if __name__ == '__main__':
     example_settings = settings_model['schema']
     scheduler_config = config_scheduler(example_settings)
     assert scheduler_config['SCHEDULER_JOB_DEFAULTS']['coalesce']
-    import sys
-    import logging
-    from flask import Flask
-    app_object = Flask(import_name=__name__)
-    app_object.logger.addHandler(logging.StreamHandler(sys.stdout))
-    app_object.logger.setLevel(logging.DEBUG)
-    app_object.config['ASSETS_DEBUG'] = False
-    os.environ['scheduler_job_store_pass'] = ''
-    job_kwargs = {'url': 'http://169.254.25.228:5000/job', 'job_details': { 'status': 'ok'}}
-    status_details = handle_request(**job_kwargs)
-    assert isinstance(status_details['code'], int)
