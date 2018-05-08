@@ -505,6 +505,22 @@ function retrieveParams() {
 
 }
 
+function autofocusEnd(input_selector) {
+
+/* a method to move cursor to end of focused selection */
+
+    $(input_selector).focus(function(){
+        if (this.setSelectionRange) {
+            var len = $(this).val().length;
+            this.setSelectionRange(len, len);
+        }
+        else {
+            $(this).val($(this).val());
+        }
+    })
+    
+}
+
 function bindFunction(element_selector, function_name, function_args, function_group='') {
     
 /* a method to bind a function to a click event */

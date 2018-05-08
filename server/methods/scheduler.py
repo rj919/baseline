@@ -5,13 +5,15 @@ __license__ = '©2018 Collective Acuity'
 def config_scheduler(scheduler_settings=None):
 
 # validate input
-    if not isinstance(scheduler_settings, dict):
+    if not scheduler_settings:
+        scheduler_settings = {}
+    elif not isinstance(scheduler_settings, dict):
         raise TypeError('Scheduler settings must be a dictionary.')
 
 # construct default configuration
     scheduler_configs = {}
 
-# add job store to scheduler
+# retrieve job store credentials
     job_store_on = False
     job_store_settings = []
     job_store_login_names = []
@@ -19,9 +21,12 @@ def config_scheduler(scheduler_settings=None):
     for key in job_store_login_keys:
         key_name = 'scheduler_job_store_%s' % key
         job_store_login_names.append(key_name)
-        if scheduler_settings[key_name]:
-            job_store_settings.append(scheduler_settings[key_name])
+        scheduler_setting = scheduler_settings.get(key_name, None)
+        if scheduler_setting:
+            job_store_settings.append(scheduler_settings)
             job_store_on = True
+
+# add job store to scheduler
     if job_store_on:
         if len(job_store_settings) != len(job_store_login_keys):
             raise IndexError('Initialization of the scheduler job store requires values for all %s login fields.' % job_store_login_names)
@@ -33,10 +38,12 @@ def config_scheduler(scheduler_settings=None):
 
 # adjust job default settings
     scheduler_job_defaults = {}
-    if scheduler_settings['scheduler_job_defaults_coalesce']:
+    default_coalesce = scheduler_settings.get('scheduler_job_defaults_coalesce', False)
+    max_instances = scheduler_settings.get('scheduler_job_defaults_max_instances', 0)
+    if default_coalesce:
         scheduler_job_defaults['coalesce'] = True
-    if scheduler_settings['scheduler_job_defaults_max_instances']:
-        scheduler_job_defaults['max_instances'] = scheduler_settings['scheduler_job_defaults_max_instances']
+    if max_instances:
+        scheduler_job_defaults['max_instances'] = max_instances
     if scheduler_job_defaults:
         scheduler_configs['SCHEDULER_JOB_DEFAULTS'] = scheduler_job_defaults
 

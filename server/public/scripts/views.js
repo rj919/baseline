@@ -8,11 +8,13 @@
 * jquery.js
 * sprintf.js
 * stackoverflow.js
+* autosize.js
 * lab.js
 **/
 
 // import $ from jquery
 // import sprintf from sprintf
+// import autosize from autosize
 // import { syntaxHighlight } from stackoverflow
 
 function slideoutDialog(dialog_id, dialog_side) {
@@ -20,7 +22,7 @@ function slideoutDialog(dialog_id, dialog_side) {
 /* a method to animate a slideout dialog */
     
 // define menu variables
-    var backdrop_id = '#dialog_backdrop'
+    var backdrop_id = '#dialog_backdrop_slideout'
     var active_id = dialog_id
     var active_links = dialog_id + ' a'
     var out_class = 'slideout-' + dialog_side
@@ -157,7 +159,6 @@ function menuBindings(menu_details) {
         for (var j=0; j < action_list.length; j++){
             const action_name = ingestString(action_list[j].name).toLowerCase().replace(/\s/g, '_');
             if (action_name){
-            
                 var function_name = ingestString(action_list[j].onclick)
                 var function_args = ingestArray(action_list[j].args)
                 var menu_selector = '#menu_action_' + action_name + '_link'
@@ -223,14 +224,12 @@ function updateTitle(title_kwargs) {
 
 // declare input schema
     var input_schema = {
-        'schema': {
-            'app_title': 'Collective Acuity',
-            'app_subtitle': 'Welcome to the Laboratory',
-            'page_title': 'Collective Acuity',
-            'page_label': 'A Machine Intelligence Laboratory'
-        },
-        'metadata': {
-            'example_statements': [ 'update the title fields' ]
+        schema: {
+            app_title: 'Mood Meter',
+            app_subtitle: 'A Wearable Mood Journal',
+            page_title: 'Mood Meter',
+            page_label: 'A Wearable Mood Journal',
+            center_desktop: false
         }
     }
 
@@ -260,6 +259,70 @@ function updateTitle(title_kwargs) {
         $(header_id).text(title_dict.page_title)
     }
 
+// toggle header center
+    var desktop_title_id = '#header_title_desktop'
+    if (title_dict.center_desktop){
+        $(desktop_title_id).removeClass('navbar-start')
+        $(desktop_title_id).addClass('navbar-center')
+    } else {
+        $(desktop_title_id).removeClass('navbar-center')
+        $(desktop_title_id).addClass('navbar-start')
+    }
+    
+}
+
+function registerHandler(input_selector, submit_callback) {
+
+/* a method to bind a submission callback to an input field */
+
+// define method variables
+    var key_code;
+    var input_value;
+    
+// block normal enter behavior
+    $(input_selector).keypress(function( event ){
+        key_code = event.keyCode
+        if (key_code === 10 || key_code === 13){
+            event.preventDefault();
+        }
+    })
+
+// add typing event handler
+    $(input_selector).keyup(function( event ){
+    
+    // retrieve key code
+        key_code = event.keyCode;
+
+    // retrieve input value
+        if ($(this).get(0).isContentEditable){
+            input_value = $(this).text()
+        } else {
+            input_value = $(this).val()
+        }
+
+    // initiate callbacks
+        if ((key_code == 10 || key_code == 13)){
+
+            submit_callback(input_value)
+        
+        }
+
+    })
+
+// add focus out handler
+    $(input_selector).focusout(function( event ){
+
+    // retrieve input value
+        if ($(this).get(0).isContentEditable){
+            input_value = $(this).text()
+        } else {
+            input_value = $(this).val()
+        }
+        
+        submit_callback(input_value)
+    
+    })
+        
 }
 
 function errorConstructor(response, exception) {
@@ -354,8 +417,8 @@ function requestingResource(request_kwargs) {
     var request_body = ingestMap(request_kwargs.body)
     if (mapSize(request_body) && request_method != 'GET') {
         ajax_map.data = JSON.stringify(request_body)
-    }
-
+    } 
+    
 // add headers to map
     var request_headers = ingestMap(request_kwargs.headers)
     for (var key in request_headers){
@@ -376,6 +439,111 @@ function requestingResource(request_kwargs) {
     
 }
 
+function errorDialog(error_message) {
+
+/* a method to construct a dialog to report errors */
+
+// define method variables
+    var dialog_title = ''
+    var dialog_message = ''
+    
+// construct regex map
+    var error_patterns = {
+        invalid: new RegExp(/Access token is invalid/g),
+        missing: new RegExp(/Access token is missing/g)
+    }
+    
+// handle missing token
+    if (error_patterns.missing.test(error_message)){
+       
+        dialog_title = 'Token Missing'
+        dialog_message = 'To access this content, an access token is required. You can register your access token, using the "Register Token" button in the menu panel.'
+        openBlank()
+        
+// handle invalid token
+    } else if (error_patterns.invalid.test(error_message)){
+
+        dialog_title = 'Token Invalid'
+        dialog_message = 'The access token you have registered is not a valid token on record. Please double-check the value you have entered.'
+        openBlank()
+        
+// handle catchall
+    } else {
+
+        dialog_title = 'Request Error'
+        dialog_message = error_message
+
+    }
+    
+// construct dialog html
+    const dialog_html = sprintf('\
+        <div class="col-xs-12 margin-vertical-10">\
+            <div class="form-text auto-height text-wrap">%s</div>\
+        </div>',
+        dialog_message
+    )
+
+// construct flexible dialog
+    var dialog_options = {
+        title: dialog_title,
+        body: dialog_html
+    }
+    flexibleDialog(dialog_options)
+    
+}
+
+function registerDialog() {
+
+/* a method to construct a dialog with an access token input field */
+
+// retrieve access token
+    var access_token = ingestString(localStorage.getItem('access_token'))
+    
+// construct dialog html
+    var token_value = ''
+    if (access_token){ token_value = ' value="' + access_token + '"'}
+    const dialog_html = sprintf('\
+        <div class="form-line text-left">\
+            <div class="col-xs-12 margin-bottom-10">\
+                <div class="form-text auto-height text-wrap">Access Token:</div>\
+            </div>\
+            <div class="col-xs-12 margin-bottom-5">\
+                <form title="Access Token">\
+                    <div class="row">\
+                        <div class="col-xs-12">\
+                            <label for="access_token_input" class="sr-only">Access Token</label>\
+                            <input id="access_token_input" type="text" autofocus class="form-input"%s>\
+                        </div>\
+                    </div>\
+                </form>\
+            </div>\
+        </div>', 
+        token_value
+    )
+
+// construct flexible dialog
+    var dialog_options = {
+        title: 'Register Token',
+        body: dialog_html
+    }
+    flexibleDialog(dialog_options)
+
+// construct selectors
+    const background_selector = '#dialog_backdrop'
+    const input_selector = '#access_token_input'
+        
+// define submission function
+    function _token_submit(input_value){
+        localStorage.setItem('access_token', input_value)
+        $(background_selector).click()
+    }
+    
+// add listeners
+    registerHandler(input_selector, _token_submit)
+    autofocusEnd(input_selector)
+    
+}
+
 function openDocumentation(div_id='') {
 
 // define documentation view
@@ -389,7 +557,8 @@ function openDocumentation(div_id='') {
             app_title: window.app_title,
             app_subtitle: 'API Documentation',
             page_title: 'API Documentation',
-            page_label: 'View API Documentation'
+            page_label: 'View API Documentation',
+            center_desktop: true
         }
         updateTitle(title_kwargs)
         
@@ -409,7 +578,8 @@ function openDocumentation(div_id='') {
         
     }
     
-// retrieve documentation
+// retrieve settings
+    var access_token = ingestString()
     requestingResource({
         route: '/api/v1',
         method: 'GET'
@@ -417,6 +587,81 @@ function openDocumentation(div_id='') {
         logConsole(response)
         _open_documentation(response)
     })
+    
+}
+
+function openReport(div_id='') {
+
+// define documentation view
+    function _open_report(doc_map=null){
+        
+    // toggle dashboard
+        openDashboard()
+    
+    // replace title
+        var title_kwargs = {
+            app_title: window.app_title,
+            app_subtitle: 'Data Report',
+            page_title: 'Data Report',
+            page_label: 'View Data Report',
+            center_desktop: true
+        }
+        updateTitle(title_kwargs)
+        
+    // toggle documentation container
+        var record_key = 'report'
+        var container_selector = '#report_container'
+        var container_html = '<div id="report_container" class="container content-container-scroll"></div>'
+        toggleView(container_selector, container_html)
+    
+    // inject doc map
+        const doc_text = syntaxHighlight(JSON.stringify(doc_map, undefined, 2))
+        const doc_html = '<pre class="text-wrap pre-json">' + doc_text + '</pre>'
+        $(container_selector).html(doc_html)
+        
+    // scroll to div
+        scrollDiv(div_id)
+        
+    }
+    
+// retrieve api data
+    var access_token = ingestString(localStorage.getItem('access_token'))
+    requestingResource({
+        route: '/api/v1',
+        method: 'GET',
+        params: { 'token': access_token }
+    }).done(function(response){
+        logConsole(response)
+        _open_report(response.details)
+    }).fail(function(error){
+        errorDialog(error)
+    })
+
+}
+
+function openBlank() {
+    
+// toggle dashboard
+    openDashboard()
+    
+// replace title
+    var title_kwargs = {
+        center_desktop: true
+    }
+    updateTitle(title_kwargs)
+    
+// toggle documentation container
+    var record_key = 'blank'
+    var container_selector = '#blank_container'
+    var container_html = '<div id="blank_container" class="container content-container-fill"></div>'
+    toggleView(container_selector, container_html)
+
+// add semi-transparent logo
+    var blank_html = '\
+        <div id="center_middle" class="center-middle">\
+            <img src="/public/images/logo.svg" class="icon-landing"></a>\
+        </div>'
+    $(container_selector).html(blank_html)
     
 }
 
@@ -449,7 +694,7 @@ function landingView() {
         <div id="landing_container">\
             <div id="center_middle" class="center-middle">\
                 <div class="burst-effect">\
-                    <a id="logo_button"><img src="/public/images/lab-logo.svg" class="icon-thumb"></a>\
+                    <a id="logo_button"><img src="/public/images/logo.svg" class="icon-thumb"></a>\
                 </div>\
             </div>\
         </div>'
@@ -470,15 +715,23 @@ function landingView() {
     
 // add listener
     $(logo_button_id).click(function(){
-        openDocumentation()
+        openBlank()
     })
 
 }
 
 function signOut() {
 
+// clear records in local storage
+    for (var i = 0; i < localStorage.length; ++i ) {
+        var record_key = localStorage.key(i)
+        localStorage.removeItem(record_key)   
+    }
+    logConsole('All records deleted from Local Storage.')
+
+// restore landing view
     landingView()
-    
+ 
 }
 
 var device_handlers = {
@@ -510,15 +763,27 @@ var device_handlers = {
                 {
                   "actions": [
                     {
-                      "icon": "icon-docs",
-                      "name": "Documentation",
-                      "onclick": "openDocumentation",
-                      "label": "View API Documentation"
+                      "icon": "icon-chart",
+                      "name": "Report",
+                      "onclick": "openReport",
+                      "label": "View Data Report"
                     }
                   ]
                 },
                 {
                   "actions": [
+                    {
+                      "icon": "icon-key",
+                      "name": "Register Token",
+                      "onclick": "registerDialog",
+                      "label": "Register an Access Token"
+                    },
+                    {
+                      "icon": "icon-doc",
+                      "name": "Documentation",
+                      "onclick": "openDocumentation",
+                      "label": "View API Documentation"
+                    },
                     {
                       "icon": "icon-logout",
                       "name": "Sign-Out",
@@ -615,7 +880,6 @@ var device_handlers = {
         
     },
       
-
 // parse view to open
     openView: function() {
     

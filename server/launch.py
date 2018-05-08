@@ -1,6 +1,6 @@
 __author__ = 'rcj1492'
-__created__ = '2015.10'
-__license__ = 'MIT'
+__created__ = '2018.04'
+__license__ = '©2018 Collective Acuity'
 
 # create init path to sibling folders
 import os
@@ -9,7 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 # initialize app and scheduler objects
 from server.init import app, scheduler
-from flask import request, session, jsonify, url_for, render_template
+from flask import request, session, jsonify, url_for, render_template, Response
 
 # add cross origin support
 from flask_cors import CORS
@@ -18,8 +18,8 @@ CORS(app)
 # define jinja content
 from labpack.records.settings import load_settings
 api_model = load_settings('models/api-model.json')
-main_details = load_settings('assets/lab-main.json')
-menu_details = load_settings('assets/lab-menu.json')
+main_details = load_settings('assets/main.json')
+menu_details = load_settings('assets/menu.json')
 landing_kwargs = {
     'menu': menu_details
 }
