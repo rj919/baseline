@@ -13,10 +13,10 @@
             <div class="col-xs-6">
                 <div id="header_title" class="dashboard-view" style="display: none;">
                     <div class="navbar-title-24 navbar-center hidden-lg hidden-md hidden-sm">
-                        <div id="header_title_text_mobile" title="{{ label }}">{{ title }}</div>
+                        <div id="header_title_mobile_text" title="{{ label }}">{{ title }}</div>
                     </div>
-                    <div class="navbar-title-24 navbar-start hidden-xs">
-                        <div id="header_title_text_desktop" title="{{ label }}">{{ title }}</div>
+                    <div id="header_title_desktop" class="navbar-title-24 navbar-start hidden-xs">
+                        <div id="header_title_desktop_text" title="{{ label }}">{{ title }}</div>
                     </div>
                 </div>
             </div>
@@ -52,6 +52,7 @@
 <!-- Modal Dialogs Block -->
 <div id="dialogs">
     <div id="dialog_backdrop" class="page-container-100 dialog-backdrop" style="display: none;"></div>
+    <div id="dialog_backdrop_slideout" class="page-container-100 dialog-backdrop" style="display: none;"></div>
     <div id="dialog_menu" class="sidebar-left dialog-sidebar-left" style="display: none;">
         <div class="container-fluid">
             <div class="row navbar id-verified-border">

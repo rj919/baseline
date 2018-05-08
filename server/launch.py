@@ -15,6 +15,21 @@ from flask import request, session, jsonify, url_for, render_template, Response
 from flask_cors import CORS
 CORS(app)
 
+# register script and style assets in flask
+from server.utils import compile_list
+from flask_assets import Environment
+assets = Environment(app)
+js_modules = compile_list('public/scripts')
+js_assets = [ 'js_assets' ]
+for module in js_modules:
+    js_assets.append(module.replace('public/',''))
+assets.register(*js_assets)
+css_sheets = compile_list('public/styles')
+css_assets = [ 'css_assets' ]
+for sheet in css_sheets:
+    css_assets.append(sheet.replace('public/',''))
+assets.register(*css_assets)
+
 # define jinja content
 from labpack.records.settings import load_settings
 api_model = load_settings('models/api-model.json')

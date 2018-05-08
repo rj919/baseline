@@ -2,9 +2,9 @@
 <html lang="en" >
 <head>
     {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/bootstrap.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/lab.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/simple-line-icons.css') }}" type="text/css">
+    {% assets "css_assets" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css">
+    {% endassets %}
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     {% block link %}{% endblock %}
     <meta charset="UTF-8">
@@ -21,14 +21,10 @@
     {% endblock %}
 
     <!-- Javascript Block -->
-    {% block javascript %}
-    <script type="text/javascript" src="{{ url_for('static', filename='scripts/jquery-3.1.1.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='scripts/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='scripts/sprintf.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='scripts/stackoverflow.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='scripts/lab.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='scripts/views.js') }}"></script>
-    {% endblock %}
+    {% assets "js_assets" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    {% block javascript %}{% endblock %}
 
   </body>
 </html>

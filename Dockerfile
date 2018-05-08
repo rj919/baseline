@@ -33,6 +33,7 @@ RUN pip3 install jsonmodel
 RUN pip3 install labpack
 RUN pip3 install paho-mqtt
 RUN pip3 install flask-cors
+RUN pip3 install Flask_Assets
 
 # Clean APK cache
 RUN rm -rf /var/cache/apk/*

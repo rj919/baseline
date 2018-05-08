@@ -17,257 +17,28 @@
 // import autosize from autosize
 // import { syntaxHighlight } from stackoverflow
 
-function slideoutDialog(dialog_id, dialog_side) {
+function errorDialog(error_message) {
 
-/* a method to animate a slideout dialog */
+/* a method to construct a dialog to report errors */
+
+// define method variables
+    var dialog_title = 'Request Error'
+    var dialog_message = error_message
     
-// define menu variables
-    var backdrop_id = '#dialog_backdrop_slideout'
-    var active_id = dialog_id
-    var active_links = dialog_id + ' a'
-    var out_class = 'slideout-' + dialog_side
-    var back_class = 'slideback-' + dialog_side
-
-// show menu dialog
-    $(backdrop_id).show()
-    $(active_id).show()
-    $(active_id).addClass(out_class)
-
-// define close function
-    function _close_dialog(){
-        $(backdrop_id).hide()
-        $(backdrop_id).off()
-        $(active_id).removeClass(out_class)
-        $(active_id).addClass(back_class)
-        setTimeout(function(){
-            $(active_id).hide()
-            $(active_id).removeClass(back_class)
-        }, 150)
-    }
-
-// bind event handlers to close dialogs
-    $(active_links).click(function(){
-        _close_dialog()
-    });
-    $(backdrop_id).click(function(){
-        _close_dialog()
-    });
-
-}
-
-function flexibleDialog(options=null) {
-
-/* a method to display text in a responsive dialog panel */
-
-// ingest variables
-    var dialog_options = ingestMap(options)
-    var title = ingestString(dialog_options.title)
-    var body = ingestString(dialog_options.body)
-    var keep_open = ingestBoolean(dialog_options.keep_open)
-
 // construct dialog html
-    var dialog_html = sprintf('\
-        <div id="flexible_dialog_box" class="dialog-flexible">\
-            <div class="container-fluid">\
-                <div class="row navbar">\
-                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>\
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">\
-                        <div id="flexible_dialog_title" class="navbar-title-24 navbar-center">%s</div>\
-                    </div>\
-                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">\
-                        <div class="navbar-title-24 navbar-end">\
-                            <a id="flexible_dialog_close" title="Close Button" class="icon-close font-sm float-middle"></a>\
-                        </div>\
-                    </div>\
-                </div>\
-            </div>\
-            <div id="flexible_dialog_body" class="container-fluid margin-bottom-10">%s</div>\
+    const dialog_html = sprintf('\
+        <div class="col-xs-12 margin-vertical-10">\
+            <div class="form-text auto-height text-wrap">%s</div>\
         </div>',
-        title, body
+        dialog_message
     )
 
-// define selectors
-    var dialog_box_selector = '#flexible_dialog_box'
-    var dialog_title_selector = '#flexible_dialog_title'
-    var dialog_close_selector = '#flexible_dialog_close'
-    var dialog_body_selector = '#flexible_dialog_body'
-    var dialog_backdrop_selector = '#dialog_backdrop'
-
-// remove previous dialogs
-    if ($(dialog_box_selector).length){ $(dialog_box_selector).remove() }
-
-// inject DOM with html content
-    $(dialog_backdrop_selector).show();
-    $('body').append(dialog_html);
-
-// define close function
-    function _close_dialog(){
-        $(dialog_backdrop_selector).hide();
-        $(dialog_box_selector).remove();
-    }
-    
-// bind event handlers to close dialogs
-    if (keep_open){
-        $(dialog_close_selector).click(_close_dialog)
-    } else {
-        $(dialog_box_selector).find('a').each(function(i, a){
-            $(a).click(_close_dialog)
-        })
-    }
-    $(dialog_backdrop_selector).click(_close_dialog)
-        
-}
-
-function blockquoteDialog(blockquote_kwargs) {
-
-/* a method to display blockquote information in a responsive dialog */
-
-// define string variables
-    var title_text = ingestString(blockquote_kwargs.title)
-    var div_id = title_text.toLowerCase().replace(/\s/g, '_')
-    var div_title = ingestString(blockquote_kwargs.description)
-    var content_text = ingestString(blockquote_kwargs.details)
-    var author_text = ingestString(blockquote_kwargs.author)
-
-// construct html content from variables
-    var content_html = sprintf('\
-        <div id="%s_details" class="font-sm text-left" title="%s">\
-            <blockquote class="blockquote-reverse">\
-                <p>%s</p>\
-                <footer>%s</footer>\
-            </blockquote>\
-        </div>',
-        div_id, div_title, content_text, author_text
-    )
-
-// open dialog window
+// construct flexible dialog
     var dialog_options = {
-        title: title_text,
-        body: content_html
+        title: dialog_title,
+        body: dialog_html
     }
     flexibleDialog(dialog_options)
-
-}
-
-function menuBindings(menu_details) {
-
-/* a method to initialize bindings for the menu actions */
-    
-    const section_list = ingestArray(menu_details.sections)
-    for (var i=0; i < section_list.length; i++){
-        const action_list = ingestArray(section_list[i].actions)
-        for (var j=0; j < action_list.length; j++){
-            const action_name = ingestString(action_list[j].name).toLowerCase().replace(/\s/g, '_');
-            if (action_name){
-                var function_name = ingestString(action_list[j].onclick)
-                var function_args = ingestArray(action_list[j].args)
-                var menu_selector = '#menu_action_' + action_name + '_link'
-                bindFunction(menu_selector, function_name, function_args)
-                
-            }
-            
-        }
-    }
-    
-}
-
-function toggleView(view_id, view_html) {
-
-/* a method to toggle between different content containers */
-
-// convert id into selector
-    if (view_id.indexOf('#') != 0){
-        view_id = '#' + view_id
-    }
-    
-// hide existing views
-    $('#content').children().each(function(){
-        $(this).hide()
-    });
-    
-// if view doesn't already exist, add it
-    if (!$(view_id).length) {
-        $('#content').append(view_html)
-// if view exists already, show it
-    } else {
-        $(view_id).show()
-    }
-
-}
-
-function scrollDiv(div_id) {
-
-/* a method to scroll to a specific element id on the page */
-
-// TODO find out why scrollTop fails in same view
-
-    if (div_id){
-        
-        var div_selector = '#' + div_id
-        if ($(div_selector).length){
-    //        parent.location.hash = div_id
-            var header_height = $('#header_container').css('height')
-            var header_value = parseInt(header_height.slice(0, -2))
-            var scroll_height = $(div_selector).offset().top - header_value
-            $('html, body').animate({ scrollTop: scroll_height }, 1)
-        }
-        
-    } else {
-        $('html, body').animate({ scrollTop: 0 }, 1)
-    }
-    
-}
-
-function updateTitle(title_kwargs) {
-
-/* a method for updating the title fields */
-
-// declare input schema
-    var input_schema = {
-        schema: {
-            app_title: 'Mood Meter',
-            app_subtitle: 'A Wearable Mood Journal',
-            page_title: 'Mood Meter',
-            page_label: 'A Wearable Mood Journal',
-            center_desktop: false
-        }
-    }
-
-// ingest arguments
-    var title_dict = input_schema.schema
-    unpackKwargs(title_kwargs, title_dict, 'updateTitle')
-
-// change page title
-    var title_parts = document.title.split(' : ')
-    if (title_dict.app_title){
-        title_parts[0] = title_dict.app_title
-    }
-    if (title_dict.app_subtitle){
-        title_parts[1] = title_dict.app_subtitle
-    }
-    document.title = title_parts.join(' : ')
-
-// change header title
-    var header_ids = [ '#header_title_text_mobile', '#header_title_text_desktop' ]
-    for (var i = 0; i < header_ids.length; i++) {
-        header_id = header_ids[i]
-        if (!title_dict.page_label) {
-        $(header_id).removeAttr('title')
-        } else {
-            $(header_id).attr('title', title_dict.page_label)
-        }
-        $(header_id).text(title_dict.page_title)
-    }
-
-// toggle header center
-    var desktop_title_id = '#header_title_desktop'
-    if (title_dict.center_desktop){
-        $(desktop_title_id).removeClass('navbar-start')
-        $(desktop_title_id).addClass('navbar-center')
-    } else {
-        $(desktop_title_id).removeClass('navbar-center')
-        $(desktop_title_id).addClass('navbar-start')
-    }
     
 }
 
@@ -323,44 +94,6 @@ function registerHandler(input_selector, submit_callback) {
     
     })
         
-}
-
-function errorConstructor(response, exception) {
-
-/* a method for handling an error in an ajax response */
-
-// retrieve variables from response
-    var response_code = response.status
-    var response_body = {}
-    try {
-        response_body = JSON.parse(response.responseText)
-    } catch(e) { }
-
-// construct message from error codes
-    var message_content = 'Errr! '
-    if (response_code === 0) {
-        message_content += 'No connection. Check network settings.'
-        window.device_online = false
-    } else if (response_code == 404) {
-        message_content += 'Page not found. [404]'
-    } else if (response_code == 500) {
-        message_content += 'Internal Server Error [500].'
-    } else if (exception === 'timeout') {
-        message_content += 'Request timeout.'
-    } else if (exception === 'abort') {
-        message_content += 'Request aborted.'
-    } else if (mapSize(ingestMap(response_body))) {
-        if (ingestString(response_body.error)) {
-            message_content += response_body.error
-        }
-    }
-
-// report error to console log
-    console.log(message_content);
-
-// return message
-    return message_content;
-
 }
 
 function requestingResource(request_kwargs) {
