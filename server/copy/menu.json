@@ -1,0 +1,59 @@
+{
+  "title": {
+    "icon": "icon-list",
+    "name": "Menu",
+    "label": "Menu"
+  },
+  "sections": [
+    {
+      "actions": [
+        {
+          "icon": "icon-chart",
+          "name": "Report",
+          "onclick": "openReport",
+          "label": "View Data Report"
+        }
+      ]
+    },
+    {
+      "actions": [
+        {
+          "icon": "icon-key",
+          "name": "Register Token",
+          "onclick": "registerDialog",
+          "label": "Register an Access Token"
+        },
+        {
+          "icon": "icon-doc",
+          "name": "Documentation",
+          "onclick": "openDocumentation",
+          "label": "View API Documentation"
+        },
+        {
+          "icon": "icon-logout",
+          "name": "Sign-Out",
+          "onclick": "signOut",
+          "label": "Sign Out from Laboratory"
+        }
+      ]
+    },
+    {
+      "actions": [
+        {
+          "icon": "icon-social-twitter",
+          "name": "Twitter",
+          "onclick": "open",
+          "args": [ "https://twitter.com/CollectiveAcuit" ],
+          "label": "Open Twitter Page"
+        },
+        {
+          "icon": "icon-social-facebook",
+          "name": "Facebook",
+          "onclick": "open",
+          "args": [ "https://www.facebook.com/collectiveacuity/" ],
+          "label": "Open Facebook Page"
+        }
+      ]
+    }
+  ]
+}

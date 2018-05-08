@@ -18,8 +18,8 @@ CORS(app)
 # define jinja content
 from labpack.records.settings import load_settings
 api_model = load_settings('models/api-model.json')
-main_details = load_settings('assets/main.json')
-menu_details = load_settings('assets/menu.json')
+main_details = load_settings('copy/main.json')
+menu_details = load_settings('copy/menu.json')
 landing_kwargs = {
     'menu': menu_details
 }
