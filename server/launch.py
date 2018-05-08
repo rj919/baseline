@@ -15,9 +15,11 @@ from flask import request, session, jsonify, url_for, render_template, Response
 from flask_cors import CORS
 CORS(app)
 
+# bundle and minify script and style assets
+from flask_assets import Environment, Bundle
+
 # register script and style assets in flask
 from server.utils import compile_list
-from flask_assets import Environment
 assets = Environment(app)
 js_modules = compile_list('public/scripts')
 js_assets = [ 'js_assets' ]

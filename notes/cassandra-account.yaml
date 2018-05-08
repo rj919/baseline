@@ -1,0 +1,4 @@
+# Credentials to Cassandra User Account
+cassandra_account_username: cassandra
+cassandra_account_password: cassandra
+cassandra_database_url: cass.domain.com
