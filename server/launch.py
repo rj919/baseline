@@ -15,13 +15,13 @@ from flask import request, session, jsonify, url_for, render_template, Response
 from flask_cors import CORS
 CORS(app)
 
-from server.bundle import bundle_modules, bundle_sheets
+# bundle and register js scripts and css styles in flask
+# IMPORTANT NOTE:   postcss is not recognized in PyCharm's run environment
+#                   use the command line to propagate changes to lab.scss
+from flask_assets import Environment
+from server.utils import bundle_modules, bundle_sheets
 js_bundle = bundle_modules(app.config['LAB_SERVER_LOGGING'])
 css_bundle = bundle_sheets(app.config['LAB_SERVER_LOGGING'])
-
-# register script and style assets in flask
-from server.utils import compile_list
-from flask_assets import Environment
 assets = Environment(app)
 js_assets = [ 
     'js_assets',
@@ -33,10 +33,12 @@ js_assets = [
 ]
 js_assets.extend(js_bundle)
 assets.register(*js_assets)
-css_assets = [ 'css_assets' ]
-for sheet in compile_list('public/styles'):
-    css_assets.append(sheet.replace('public/',''))
-# css_assets.extend(css_bundle)
+css_assets = [ 
+    'css_assets',
+    'styles/bootstrap.css',
+    'styles/simple-line-icons.css'
+]
+css_assets.extend(css_bundle)
 assets.register(*css_assets)
 
 # define jinja content

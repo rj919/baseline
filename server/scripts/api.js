@@ -17,31 +17,6 @@
 // import autosize from autosize
 // import { syntaxHighlight } from stackoverflow
 
-function errorDialog(error_message) {
-
-/* a method to construct a dialog to report errors */
-
-// define method variables
-    var dialog_title = 'Request Error'
-    var dialog_message = error_message
-    
-// construct dialog html
-    const dialog_html = sprintf('\
-        <div class="col-xs-12 margin-vertical-10">\
-            <div class="form-text auto-height text-wrap">%s</div>\
-        </div>',
-        dialog_message
-    )
-
-// construct flexible dialog
-    var dialog_options = {
-        title: dialog_title,
-        body: dialog_html
-    }
-    flexibleDialog(dialog_options)
-    
-}
-
 function registerHandler(input_selector, submit_callback) {
 
 /* a method to bind a submission callback to an input field */
@@ -302,7 +277,7 @@ function openDocumentation(div_id='') {
         toggleView(container_selector, container_html)
     
     // inject doc map
-        const doc_text = syntaxHighlight(JSON.stringify(doc_map.schema, undefined, 2))
+        const doc_text = syntaxHighlight(JSON.stringify(doc_map, undefined, 2))
         const doc_html = '<pre class="text-wrap pre-json">' + doc_text + '</pre>'
         $(container_selector).html(doc_html)
         
@@ -317,7 +292,7 @@ function openDocumentation(div_id='') {
         route: '/api/v1',
         method: 'GET'
     }).done(function(response){
-        logConsole(response)
+        logConsole(response.schema)
         _open_documentation(response)
     })
     
@@ -365,7 +340,7 @@ function openReport(div_id='') {
         params: { 'token': access_token }
     }).done(function(response){
         logConsole(response)
-        _open_report(response.details)
+        _open_report(response.schema)
     }).fail(function(error){
         errorDialog(error)
     })
@@ -392,7 +367,7 @@ function openBlank() {
 // add semi-transparent logo
     var blank_html = '\
         <div id="center_middle" class="center-middle">\
-            <img src="/public/images/logo.svg" class="icon-landing"></a>\
+            <img src="/public/images/logo.svg" class="icon-landing font-watermark"></a>\
         </div>'
     $(container_selector).html(blank_html)
     
