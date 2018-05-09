@@ -8,33 +8,39 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 # initialize app and scheduler objects
-from server.init import app, scheduler
+from server.init import app, scheduler, api_model
 from flask import request, session, jsonify, url_for, render_template, Response
 
 # add cross origin support
 from flask_cors import CORS
 CORS(app)
 
-# bundle and minify script and style assets
-from flask_assets import Environment, Bundle
+from server.bundle import bundle_modules, bundle_sheets
+js_bundle = bundle_modules(app.config['LAB_SERVER_LOGGING'])
+css_bundle = bundle_sheets(app.config['LAB_SERVER_LOGGING'])
 
 # register script and style assets in flask
 from server.utils import compile_list
+from flask_assets import Environment
 assets = Environment(app)
-js_modules = compile_list('public/scripts')
-js_assets = [ 'js_assets' ]
-for module in js_modules:
-    js_assets.append(module.replace('public/',''))
+js_assets = [ 
+    'js_assets',
+    'scripts/jquery-3.1.1.min.js',
+    'scripts/sprintf.min.js',
+    'scripts/autosize.js',
+    'scripts/stackoverflow.js',
+    'scripts/bootstrap.min.js'
+]
+js_assets.extend(js_bundle)
 assets.register(*js_assets)
-css_sheets = compile_list('public/styles')
 css_assets = [ 'css_assets' ]
-for sheet in css_sheets:
+for sheet in compile_list('public/styles'):
     css_assets.append(sheet.replace('public/',''))
+# css_assets.extend(css_bundle)
 assets.register(*css_assets)
 
 # define jinja content
 from labpack.records.settings import load_settings
-api_model = load_settings('models/api-model.json')
 main_details = load_settings('copy/main.json')
 menu_details = load_settings('copy/menu.json')
 landing_kwargs = {

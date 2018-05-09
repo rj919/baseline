@@ -16,4 +16,5 @@ def compile_list(folder_path, file_suffix=''):
     return file_list
 
 if __name__ == '__main__':
-    print(compile_list('public/styles'))
+    
+    print(compile_list('assets/scripts'))
