@@ -36,6 +36,7 @@ assets.register(*js_assets)
 css_assets = [ 
     'css_assets',
     'styles/bootstrap.css',
+    'styles/icomoon.css',
     'styles/simple-line-icons.css'
 ]
 css_assets.extend(css_bundle)
