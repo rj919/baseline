@@ -1,0 +1,8 @@
+###############  .gitignore   ##################
+copy
+datasets
+fonts
+images
+notes
+scripts
+styles
