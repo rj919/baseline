@@ -45,6 +45,9 @@ class flaskDev(object):
     LAB_SERVER_LOGGING = 'DEBUG'
     LAB_SQL_SERVER = 'sqlite:///../data/records.db'
     LAB_CASSANDRA_SERVER = ''
+    LAB_JS_FILTERS = []
+    LAB_CSS_FILTERS = [ 'pyscss', 'autoprefixer6' ]
+    UGLIFYJS_EXTRA_ARGS = []
 class flaskProd(object):
     LAB_SECRET_KEY = api_config['lab_secret_key']
     LAB_SERVER_PROTOCOL = 'https'
@@ -55,8 +58,12 @@ class flaskProd(object):
     LAB_CASSANDRA_SERVER = '' # create keyspace in live cassandra in production
 
 # select flask config from system environment
-if system_environment == 'dev':
+if system_environment in ('dev', 'mangle'):
     app.config.from_object(flaskDev)
+    if system_environment == 'mangle':
+        app.config['UGLIFYJS_EXTRA_ARGS'].extend(['-m', '--comments'])
+        app.config['LAB_JS_FILTERS'].append('uglifyjs')
+        app.config['LAB_CSS_FILTERS'].append('cssmin')
 else:
     app.config.from_object(flaskProd)
     
@@ -98,7 +105,7 @@ scheduler_configuration = {
         'coalesce': True
     } ],
     'SCHEDULER_TIMEZONE': 'UTC',
-    'SCHEDULER_VIEWS_ENABLED': True
+    'SCHEDULER_VIEWS_ENABLED': False
 }
 
 # adjust scheduler configuration settings

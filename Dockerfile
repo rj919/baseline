@@ -34,6 +34,7 @@ RUN pip3 install labpack
 RUN pip3 install paho-mqtt
 RUN pip3 install flask-cors
 RUN pip3 install Flask_Assets
+RUN pip3 install Flask-APScheduler
 
 # Clean APK cache
 RUN rm -rf /var/cache/apk/*

@@ -20,18 +20,15 @@ CORS(app)
 #                   use the command line to propagate changes to lab.scss
 from flask_assets import Environment
 from server.utils import bundle_modules, bundle_sheets
-js_bundle = bundle_modules(app.config['LAB_SERVER_LOGGING'])
-css_bundle = bundle_sheets(app.config['LAB_SERVER_LOGGING'])
 assets = Environment(app)
 js_assets = [ 
     'js_assets',
     'scripts/jquery-3.1.1.min.js',
     'scripts/sprintf.min.js',
     'scripts/autosize.js',
-    'scripts/stackoverflow.js',
     'scripts/bootstrap.min.js'
 ]
-js_assets.extend(js_bundle)
+js_assets = bundle_modules(js_assets, app)
 assets.register(*js_assets)
 css_assets = [ 
     'css_assets',
@@ -39,7 +36,7 @@ css_assets = [
     'styles/icomoon.css',
     'styles/simple-line-icons.css'
 ]
-css_assets.extend(css_bundle)
+css_assets = bundle_sheets(css_assets, app)
 assets.register(*css_assets)
 
 # define jinja content
