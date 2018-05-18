@@ -70,7 +70,7 @@
                 <div class="col-xs-12 text-left">
                     {% for action in section.actions %}
                     <div id="menu_action_{{ action.name|lower()|replace(' ', '_') }}" class="form-line">
-                        <a id="menu_action_{{ action.name|lower()|replace(' ', '_') }}_link" class="form-text text-nowrap"{% if action.label %} title="{{ action.label }}{% endif %}">
+                        <a id="menu_action_{{ action.name|lower()|replace(' ', '_') }}_link" class="form-title text-nowrap"{% if action.label %} title="{{ action.label }}{% endif %}">
                             <span class="{% if action.icon %}{{ action.icon}}{% else %}icon-chemistry{% endif %} padding-right-10"></span>{% if action.name %}{{ action.name }}{% else %}Experiment{% endif %}
                         </a>
                     </div>
