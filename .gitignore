@@ -8,6 +8,7 @@ keys/
 ###############  media files  ##################
 publicity/
 data/
+tinker/
 
 ############### distro files  ##################
 .webassets-cache/
@@ -47,7 +48,7 @@ desktop.ini
 *.gdoc
 
 #################   data files    #################
-tinker/
+
 
 #################  unit testing   #################
 htmlcov/
