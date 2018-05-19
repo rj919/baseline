@@ -2,8 +2,8 @@
 # https://docs.docker.com/compose/compose-file/
 version: '3.3'
 services:
-  api: # name for container alias and service in lab registry
-    image: api # replace with preferred pre-built image name
+  base: # name for container alias and service in lab registry
+    image: base # replace with preferred pre-built image name
     build: # remove if using pre-built image
       context: .
       dockerfile: Dockerfile
@@ -15,7 +15,7 @@ services:
       - {'type': 'bind', 'source': './cred', 'target': '/opt/cred'}
       - {'type': 'bind', 'source': './data', 'target': '/opt/data'}
       - {'type': 'bind', 'source': './server', 'target': '/opt/server'}
-    command: gunicorn -k gevent -w 1 --chdir /opt/server launch:app -b 0.0.0.0:5001 # eg.
+    command: gunicorn -k gevent -w 1 --chdir /opt/server launch:app -b 0.0.0.0:$PORT # eg.
     labels: # optional map of subdomains to ports for deployment to reverse proxy/load balancer
-      com.collectiveacuity.api: '5001'
+      com.collectiveacuity.base: '5001'
     

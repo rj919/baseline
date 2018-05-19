@@ -18,10 +18,10 @@
     {
       "actions": [
         {
-          "icon": "icon-key",
-          "name": "Register Token",
+          "icon": "icon-home",
+          "name": "Policy Address",
           "onclick": "registerDialog",
-          "label": "Register an Access Token"
+          "label": "Change the Policy Address"
         },
         {
           "icon": "icon-doc",

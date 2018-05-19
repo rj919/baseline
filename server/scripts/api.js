@@ -213,13 +213,13 @@ function registerDialog() {
     const dialog_html = sprintf('\
         <div class="form-line text-left">\
             <div class="col-xs-12 margin-bottom-10">\
-                <div class="form-text auto-height text-wrap">Access Token:</div>\
+                <div class="form-text auto-height text-wrap">Policy Address:</div>\
             </div>\
             <div class="col-xs-12 margin-bottom-5">\
-                <form title="Access Token">\
+                <form title="Policy Address">\
                     <div class="row">\
                         <div class="col-xs-12">\
-                            <label for="access_token_input" class="sr-only">Access Token</label>\
+                            <label for="access_token_input" class="sr-only">Policy Address</label>\
                             <input id="access_token_input" type="text" autofocus class="form-input"%s>\
                         </div>\
                     </div>\
@@ -231,7 +231,7 @@ function registerDialog() {
 
 // construct flexible dialog
     var dialog_options = {
-        title: 'Register Token',
+        title: 'Update Address',
         body: dialog_html
     }
     flexibleDialog(dialog_options)
@@ -250,6 +250,62 @@ function registerDialog() {
     registerHandler(input_selector, _token_submit)
     autofocusEnd(input_selector)
     
+}
+
+function updateTitle(title_kwargs) {
+
+/* a method for updating the title fields */
+
+// declare input schema
+    var input_schema = {
+        'schema': {
+            'app_title': 'Baseline',
+            'app_subtitle': 'A Claims Validation Platform',
+            'page_title': 'Baseline',
+            'page_label': 'A Claims Validation Platform',
+            'center_desktop': false
+        },
+        'metadata': {
+            'example_statements': [ 'update the title fields' ]
+        }
+    }
+
+// ingest arguments
+    var title_dict = input_schema.schema
+    unpackKwargs(title_kwargs, title_dict, 'updateTitle')
+
+// change page title
+    var title_parts = document.title.split(' : ')
+    if (title_dict.app_title){
+        title_parts[0] = title_dict.app_title
+    }
+    if (title_dict.app_subtitle){
+        title_parts[1] = title_dict.app_subtitle
+    }
+    document.title = title_parts.join(' : ')
+
+// change header title
+    var header_ids = [ '#header_title_desktop_text', '#header_title_mobile_text' ]
+    for (var i = 0; i < header_ids.length; i++) {
+        header_id = header_ids[i]
+        if (!title_dict.page_label) {
+        $(header_id).removeAttr('title')
+        } else {
+            $(header_id).attr('title', title_dict.page_label)
+        }
+        $(header_id).text(title_dict.page_title)
+    }
+
+// toggle header center
+    var desktop_title_id = '#header_title_desktop'
+    if (title_dict.center_desktop){
+        $(desktop_title_id).removeClass('navbar-start')
+        $(desktop_title_id).addClass('navbar-center')
+    } else {
+        $(desktop_title_id).removeClass('navbar-center')
+        $(desktop_title_id).addClass('navbar-start')
+    }
+
 }
 
 function openDocumentation(div_id='') {
@@ -390,6 +446,7 @@ function openDashboard() {
         }
     })
     $('.header-border').addClass('navbar-border')
+    $('.header-border').addClass('navbar-accent')
 
 }
 
@@ -420,6 +477,7 @@ function landingView() {
         }
     })
     $('.header-border').removeClass('navbar-border')
+    $('.header-border').removeClass('navbar-accent')
     
 // add listener
     $(logo_button_id).click(function(){
@@ -481,10 +539,10 @@ var device_handlers = {
                 {
                   "actions": [
                     {
-                      "icon": "icon-key",
-                      "name": "Register Token",
+                      "icon": "icon-home",
+                      "name": "Policy Address",
                       "onclick": "registerDialog",
-                      "label": "Register an Access Token"
+                      "label": "Change Policy Address"
                     },
                     {
                       "icon": "icon-doc",

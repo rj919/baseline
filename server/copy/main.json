@@ -1,8 +1,8 @@
 {
-  "title": "Collective Acuity",
-  "subtitle": "Welcome to the Laboratory",
-  "label": "A Machine Learning Laboratory",
-  "description": "Collective Acuity is a digital laboratory for the research and development of machine intelligence.",
+  "title": "Baseline",
+  "subtitle": "A Claims Validation Platform",
+  "label": "A Claims Validation Platform",
+  "description": "Baseline is a drone based platform for insurance claims validation.",
   "organization": "Collective Acuity",
   "contacts": {
     "twitter": "https://twitter.com/CollectiveAcuit",

@@ -3,7 +3,7 @@
 {% block body %}
 <!-- Header Block -->
 <div id="header">
-    <div id="header_container" class="container-fluid header-container navbar-fixed">
+    <div id="header_container" class="container-fluid header-container navbar">
         <div class="row navbar header-border">
             <div class="col-xs-3">
                 <div id="header_menu" class="navbar-title-24 navbar-start dashboard-view" style="display: none;">
@@ -13,10 +13,10 @@
             <div class="col-xs-6">
                 <div id="header_title" class="dashboard-view" style="display: none;">
                     <div class="navbar-title-24 navbar-center hidden-lg hidden-md hidden-sm">
-                        <div id="header_title_mobile_text" title="{{ label }}">{{ title }}</div>
+                        <div id="header_title_mobile_text" class="letterhead" title="{{ label }}">{{ title }}</div>
                     </div>
                     <div id="header_title_desktop" class="navbar-title-24 navbar-start hidden-xs">
-                        <div id="header_title_desktop_text" title="{{ label }}">{{ title }}</div>
+                        <div id="header_title_desktop_text" class="letterhead" title="{{ label }}">{{ title }}</div>
                     </div>
                 </div>
             </div>
@@ -31,16 +31,16 @@
 <!-- Content Block -->
 <div id="content">
 </div>
-<!-- Footer Block -->>
+<!-- Footer Block -->
 <div id="footer">
     <div id="footer_container" class="container-fluid footer-container">
         <div class="landing-view" style="display: none;">
             <div class="row navbar navbar-title-16">
                 <div class="col-lg-6 col-md-6 col-sm-6 hidden-xs font-title-light">
-                    <div class="text-nowrap">A <a href="{{ contacts.twitter }}" target="_blank" class="letterhead">{{ organization }}</a> creation.</div>
+                    <div class="text-nowrap">A <a href="{{ contacts.twitter }}" target="_blank" class="letterhead-lab">{{ organization }}</a> creation.</div>
                 </div>
                 <div class="hidden-lg hidden-md hidden-sm col-xs-12 font-title-light">
-                    <div class="text-center">A <a href="{{ contacts.twitter }}" target="_blank" class="letterhead">{{ organization }}</a> creation.</div>
+                    <div class="text-center">A <a href="{{ contacts.twitter }}" target="_blank" class="letterhead-lab">{{ organization }}</a> creation.</div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 hidden-xs">
                 </div>
@@ -55,7 +55,7 @@
     <div id="dialog_backdrop_slideout" class="page-container-100 dialog-backdrop" style="display: none;"></div>
     <div id="dialog_menu" class="sidebar-left dialog-sidebar-left" style="display: none;">
         <div class="container-fluid">
-            <div class="row navbar id-verified-border">
+            <div class="row navbar-accent navbar-border id-verified-border">
                 <div class="col-xs-2">
                     <a id="dialog_menu_title_icon" title="Menu" class="navbar-title-24 navbar-start"><span class="icon-list"></span></a>
                 </div>

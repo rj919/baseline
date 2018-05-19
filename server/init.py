@@ -8,7 +8,7 @@ system_environment = environ.get('SYSTEM_ENVIRONMENT', 'dev')
 
 # retrieve credentials
 from labpack.records.settings import load_settings
-api_config = load_settings('../cred/api.yaml')
+flask_config = load_settings('../cred/flask.yaml')
 postgres_config = load_settings('../cred/aws-postgres.yaml')
 scheduler_config = {}
 # scheduler_config = load_settings('../cred/scheduler.yaml')
@@ -38,7 +38,7 @@ app = Flask(**flask_kwargs)
 
 # define flask environments
 class flaskDev(object):
-    LAB_SECRET_KEY = api_config['lab_secret_key']
+    LAB_SECRET_KEY = flask_config['flask_secret_key']
     LAB_SERVER_PROTOCOL = 'http'
     LAB_SERVER_DOMAIN = 'localhost'
     LAB_SERVER_PORT = 5001
@@ -49,7 +49,7 @@ class flaskDev(object):
     LAB_CSS_FILTERS = [ 'pyscss', 'autoprefixer6' ]
     UGLIFYJS_EXTRA_ARGS = []
 class flaskProd(object):
-    LAB_SECRET_KEY = api_config['lab_secret_key']
+    LAB_SECRET_KEY = flask_config['flask_secret_key']
     LAB_SERVER_PROTOCOL = 'https'
     LAB_SERVER_DOMAIN = 'api.collectiveacuity.com'
     LAB_SERVER_PORT = 5001
