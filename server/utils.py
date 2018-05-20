@@ -120,6 +120,55 @@ def construct_response(request_details, request_model=None, endpoint_list=None, 
 
     return response_details
 
+def retrieve_flightplan(access_token, root_path='../data/'):
+    
+    from os import listdir, path
+    from hashlib import md5
+    from labpack.records.settings import load_settings
+    
+    flightplan_details = {}
+    
+    account_dir = listdir(root_path)
+    hash_string = md5(access_token.encode('utf-8')).hexdigest()
+    if hash_string in account_dir:
+        flightplan_path = '../data/%s/flightplan.json' % hash_string
+        flightplan_details = load_settings(flightplan_path)
+
+        # construct image paths
+        for waypoint in flightplan_details['waypoints']:
+            base_dir_path = 'public/images/%s/%s%s' % (hash_string, waypoint['lat'], waypoint['lon'])
+            for elevation in ('3','10','17'):
+                image_dir_path = '%s/%s' % (base_dir_path, elevation)
+                if path.exists(image_dir_path):
+                    image_dir_list = listdir(image_dir_path)
+                    for image in image_dir_list:
+                        image_name, image_ext = path.splitext(image)
+                        image_path = '/%s/%s' % (image_dir_path, image)
+                        if not 'photos' in waypoint.keys():
+                            waypoint['photos'] = []
+                        photo_details = {
+                            'date': image_name,
+                            'elevation': int(elevation),
+                            'src': image_path
+                        }
+                        waypoint['photos'].append(photo_details)
+    
+    return flightplan_details
+
+def update_flightplan(access_token, flightplan_details):
+    
+    from os import listdir, path
+    from hashlib import md5
+    from labpack.records.settings import save_settings
+    
+    account_dir = listdir('../data/')
+    hash_string = md5(access_token.encode('utf-8')).hexdigest()
+    if hash_string in account_dir:
+        flightplan_path = '../data/%s/flightplan.json' % hash_string
+        save_settings(flightplan_path, flightplan_details)
+        return True
+    return False
+    
 if __name__ == '__main__':
     
-    print(compile_list('assets/scripts'))
+    print(retrieve_flightplan('459 Old Stamford Road New Canaan, CT 06840'))

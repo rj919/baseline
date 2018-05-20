@@ -68,7 +68,7 @@ if __name__ == '__main__':
         email_kwargs = {
             'recipient_list': [ main_details['contacts']['email'] ], 
             'sender_email': main_details['contacts']['noreply'],
-            'sender_name': main_details['title'],
+            'sender_name': 'The Travelers Companies',
             'email_subject': 'Thank You Enrolling in Travelers Home Insurance',
             'content_html': email_html
         }

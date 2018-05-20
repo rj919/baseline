@@ -49,34 +49,44 @@ landing_kwargs = {
 landing_kwargs.update(**main_details)
 
 # import request and response dependencies
+from os import listdir, path
+from hashlib import md5
+from labpack.records.settings import load_settings
 from labpack.parsing.flask import extract_request_details
-from server.utils import construct_response
+from server.utils import construct_response, retrieve_flightplan, update_flightplan
 
 @app.route('/')
 def landing_page():
     ''' landing page route '''
     return render_template('dashboard.html', **landing_kwargs), 200
 
-@app.route('/profile', methods=['GET','POST'])
+@app.route('/account', methods=['GET','POST'])
 def profile_route():
+    
     ''' profile page route '''
+    
     request_details = extract_request_details(request)
     app.logger.debug(request_details)
-    return jsonify({'status':'ok'}), 200
+    response_details = construct_response(request_details)
+    access_token = request_details['params'].get('token', '')
+    if not access_token:
+        response_details['error'] = 'Access token is missing'
+    if not response_details['error']:
+        
+        # retrieve flightplan
+        if request_details['method'] == 'GET':
+            flightplan_details = retrieve_flightplan(access_token)
+            response_details['details'] = flightplan_details
+        
+        # update flightplan
+        elif request_details['method'] == 'POST':
+            success = update_flightplan(access_token, request_details['json'])
+            response_details['details'] = { 'success': success }
+            
+    app.logger.debug(response_details)
+    return jsonify(response_details), response_details['code']
 
-@app.route('/flight', methods=['GET','POST'])
-def flight_route():
-    ''' flight page route '''
-    request_details = extract_request_details(request)
-    app.logger.debug(request_details)
-    return jsonify({'status':'ok'}), 200
 
-@app.route('/report', methods=['GET','POST'])
-def report_route():
-    ''' profile page route '''
-    request_details = extract_request_details(request)
-    app.logger.debug(request_details)
-    return jsonify({'status':'ok'}), 200
 
 @app.route('/api/v1')
 def api_v1_route():

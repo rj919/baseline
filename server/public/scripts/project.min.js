@@ -355,33 +355,173 @@ function openDocumentation(div_id='') {
     
 }
 
-function openReport(div_id='') {
+function openProfile(div_id='') {
 
-// define documentation view
-    function _open_report(doc_map=null){
-        
+    function _open_profile(account_map=null){
+    
     // toggle dashboard
         openDashboard()
     
     // replace title
         var title_kwargs = {
-            app_title: window.app_title,
-            app_subtitle: 'Image Report',
-            page_title: window.app_title,
-            page_label: 'View Image Report',
             center_desktop: true
         }
         updateTitle(title_kwargs)
+    
+    // toggle navigation
+        toggleNavigation('User Profile')
         
     // toggle documentation container
-        var record_key = 'report'
-        var container_selector = '#report_container'
-        var container_html = '<div id="report_container" class="container content-container-scroll"></div>'
+        var record_key = 'profile'
+        var container_selector = '#profile_container'
+        var container_html = '<div id="profile_container" class="container content-container-scroll"></div>'
         toggleView(container_selector, container_html)
     
     // inject doc map
-        if (doc_map){
-            const doc_text = syntaxHighlight(JSON.stringify(doc_map, undefined, 2))
+        if (account_map){
+            
+            // ingest fields
+            const name_first = ' value="' + ingestString(account_map.name_first) + '"'
+            const name_last = ' value="' + ingestString(account_map.name_last) + '"'
+            const address = ' value="' + ingestString(account_map.address) + '"'
+            const policy_id = ' value="' + ingestString(account_map.policy_id) + '"'
+            const account_status = ingestBoolean(account_map.status)
+            
+            // construct profile html
+            const profile_html = sprintf('\
+                <section class="section-last">\
+                    <div class="form-line text-left">\
+                        <div class="col-xs-12 margin-bottom-5">\
+                            <div class="form-text auto-height text-wrap">First Name:</div>\
+                        </div>\
+                        <div class="col-xs-12 margin-bottom-20">\
+                            <form title="First Name">\
+                                <div class="row">\
+                                    <div class="col-xs-12">\
+                                        <label for="name_first_input" class="sr-only">First Name:</label>\
+                                        <input id="name_first_input" type="text" class="form-input"%s>\
+                                    </div>\
+                                </div>\
+                            </form>\
+                        </div>\
+                    </div>\
+                    <div class="form-line text-left">\
+                        <div class="col-xs-12 margin-bottom-5">\
+                            <div class="form-text auto-height text-wrap">Last Name:</div>\
+                        </div>\
+                        <div class="col-xs-12 margin-bottom-20">\
+                            <form title="Last Name">\
+                                <div class="row">\
+                                    <div class="col-xs-12">\
+                                        <label for="name_last_input" class="sr-only">Last Name:</label>\
+                                        <input id="name_last_input" type="text" class="form-input"%s>\
+                                    </div>\
+                                </div>\
+                            </form>\
+                        </div>\
+                    </div>\
+                    <div class="form-line text-left">\
+                        <div class="col-xs-12 margin-bottom-5">\
+                            <div class="form-text auto-height text-wrap">Address:</div>\
+                        </div>\
+                        <div class="col-xs-12 margin-bottom-20">\
+                            <form title="Address">\
+                                <div class="row">\
+                                    <div class="col-xs-12">\
+                                        <label for="address_input" class="sr-only">Address:</label>\
+                                        <input id="address_input" type="text" class="form-input"%s>\
+                                    </div>\
+                                </div>\
+                            </form>\
+                        </div>\
+                    </div>\
+                    <div class="form-line text-left">\
+                        <div class="col-xs-12 margin-bottom-5">\
+                            <div class="form-text auto-height text-wrap">Policy ID:</div>\
+                        </div>\
+                        <div class="col-xs-12 margin-bottom-20">\
+                            <form title="Policy ID">\
+                                <div class="row">\
+                                    <div class="col-xs-12">\
+                                        <label for="policy_id_input" class="sr-only">Policy ID:</label>\
+                                        <input id="policy_id_input" type="text" class="form-input"%s>\
+                                    </div>\
+                                </div>\
+                            </form>\
+                        </div>\
+                    </div>\
+                    <div class="form-line text-left">\
+                        <div id="account_status_id" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 form-button margin-bottom-5">Activate Service</div>\
+                        <div class="col-xs-12 font-text margin-bottom-20 text-wrap">By activating the service, you are allowing Baseline to dispatch a quadcopter to your address and collect photos of the exterior of your property and infrastructure sometime this week weather permitting as well as once every year from this date.</div>\
+                    </div>\
+                </section>',
+                name_first, name_last, address, policy_id)
+                $(container_selector).html(profile_html)
+                
+                // add button
+                const account_status_selector = '#account_status_id'
+                
+                $(account_status_selector).click(function(){
+                    var button_status = $(account_status_selector).text()
+                    if (button_status == 'Activate Service'){
+                        $(account_status_selector).text('Deactivate Service')
+                        $(account_status_selector).addClass('form-button-off')
+                        $(account_status_selector).removeClass('form-button')
+                    } else {
+                        $(account_status_selector).text('Activate Service')
+                        $(account_status_selector).removeClass('form-button-off')
+                        $(account_status_selector).addClass('form-button')
+                    }
+                    
+                })
+                
+        }
+        
+    // scroll to div
+        scrollDiv(div_id)
+        
+    }
+
+// retrieve account data
+    var access_token = ingestString(localStorage.getItem('access_token'))
+    requestingResource({
+        route: '/account',
+        method: 'GET',
+        params: { 'token': access_token }
+    }).done(function(response){
+        logConsole(response)
+        _open_profile(response.details)
+    }).fail(function(error){
+        errorDialog(error)
+    })
+    
+}
+
+function openFlight(div_id='') {
+
+    function _open_flight(account_map=null){
+    
+    // toggle dashboard
+        openDashboard()
+    
+    // replace title
+        var title_kwargs = {
+            center_desktop: true
+        }
+        updateTitle(title_kwargs)
+    
+    // toggle navigation
+        toggleNavigation('Flight Plan')
+        
+    // toggle documentation container
+        var record_key = 'flight'
+        var container_selector = '#flight_container'
+        var container_html = '<div id="flight_container" class="container content-container-scroll"></div>'
+        toggleView(container_selector, container_html)
+    
+    // inject doc map
+        if (account_map){
+            const doc_text = syntaxHighlight(JSON.stringify(account_map, undefined, 2))
             const doc_html = '<pre class="text-wrap pre-json">' + doc_text + '</pre>'
             $(container_selector).html(doc_html)
         }
@@ -390,16 +530,144 @@ function openReport(div_id='') {
         scrollDiv(div_id)
         
     }
-    
-// retrieve api data
+
+// retrieve account data
     var access_token = ingestString(localStorage.getItem('access_token'))
     requestingResource({
-        route: '/report',
+        route: '/account',
         method: 'GET',
         params: { 'token': access_token }
     }).done(function(response){
         logConsole(response)
-        _open_report()
+        _open_flight(response.details)
+    }).fail(function(error){
+        errorDialog(error)
+    })
+    
+}
+
+function openReport(div_id='') {
+
+// define documentation view
+    function _open_report(account_map=null){
+        
+    // toggle dashboard
+        openDashboard()
+    
+    // replace title
+        var title_kwargs = {
+            center_desktop: true
+        }
+        updateTitle(title_kwargs)
+    
+    // toggle navigation
+        toggleNavigation('Image Report')
+        
+    // toggle documentation container
+        var record_key = 'report'
+        var container_selector = '#report_container'
+        var container_html = '<div id="report_container" class="container content-container-scroll"></div>'
+        toggleView(container_selector, container_html)
+    
+    // inject doc map
+        if (account_map){
+            
+            // construct content
+            var content_html = sprintf('\
+                <div class="row">\
+                    <div id="%s_index" class="col-lg-3 col-md-3 col-sm-3 col-xs-12"></div>\
+                    <div id="%s_main" class="col-lg-9 col-md-9 col-sm-9 hidden-xs"></div>\
+                </div>', 
+                record_key, record_key)
+            $(container_selector).html(content_html)
+            
+            // construct index header
+            const index_selector = '#' + record_key + '_index'
+            const main_selector = '#' + record_key + '_main'
+            const index_update_selector = '#' + record_key + '_index_update'
+            const main_update_selector = '#' + record_key + '_main_update'
+            const main_active_selector = '#' + record_key + '_main_active'
+            var index_header = sprintf('\
+                <section class="section-row">\
+                    <div class="row form-line">\
+                        <div class="col-xs-12 font-title no-wrap">%s</div>\
+                    </div>\
+                    <div class="row form-line">\
+                        <div class="col-xs-1"></div><div id="report_index_update" class="col-xs-4 form-button">Update</div>\
+                    </div>\
+                </section>', account_map.address)
+            $(index_header).appendTo(index_selector)
+            
+            // construct main header
+            var main_html = sprintf('\
+                <section class="section-row">\
+                    <div class="row form-line">\
+                        <div class="col-xs-10 form-title no-wrap">%s</div><div id="report_main_update" class="col-xs-2 form-button">Update</div>\
+                    </div>\
+                    <div id="report_main_active"></div>\
+                </section>', 
+                account_map.address)
+            $(main_html).appendTo(main_selector)
+            
+            // populate index with images
+            for (var i = 0; i < account_map.waypoints.length; i++){
+                
+                const waypoint_details = account_map.waypoints[i]
+                const waypoint_latlon = sprintf('%s, %s', waypoint_details.lat.toString(), waypoint_details.lon.toString())
+                
+                for (var j = 0; j < waypoint_details.photos.length; j++){
+              
+                    const image_details = waypoint_details.photos[j]
+                    
+                    const image_html = sprintf('\
+                        <section class="section-row">\
+                            <div class="row form-line">\
+                                <div class="col-xs-3">%s</div>\
+                                <div class="col-xs-6">%s</div>\
+                                <div class="col-xs-3">%sft</div>\
+                            </div>\
+                            <div id="report_index_photo_%s_%s" class="row form-line">\
+                                <div class="col-xs-12">\
+                                    <table><tbody><tr><td align="center">\
+                                        <img src="%s" style="width:100%%;height:auto;margin-left:auto;margin-right:auto;">\
+                                    </td></tr></tbody></table>\
+                                </div>\
+                            </div>\
+                        </section>', 
+                        image_details.date, waypoint_latlon, image_details.elevation, i, j, image_details.src)
+                    $(image_html).appendTo(index_selector)
+                    
+                    // add click
+                    const photo_selector = sprintf('#report_index_photo_%s_%s', i, j)
+                    $(photo_selector).click(function(){ 
+                        $(main_active_selector).html(image_html)
+                    })
+                    
+                    // add initial image
+                    if (i == 0 && j == 0){
+                        $(main_active_selector).html(image_html)
+                    }
+                    
+                }
+                    
+            }
+         
+        }
+        
+    // scroll to div
+        scrollDiv(div_id)
+        
+    }
+    
+// retrieve account data
+    var access_token = ingestString(localStorage.getItem('access_token'))
+    requestingResource({
+        route: '/account',
+        method: 'GET',
+        params: { 'token': access_token }
+    }).done(function(response){
+        logConsole(response)
+        _open_report(response.details)
     }).fail(function(error){
         errorDialog(error)
     })
@@ -423,31 +691,6 @@ function openBlank() {
     var container_html = '<div id="blank_container" class="container content-container-fill"></div>'
     toggleView(container_selector, container_html)
 
-// add navigation links
-    var navigation_links = {
-        'links': [
-            {
-                'icon': 'icon-user',
-                'name': 'User Profile',
-                'label': 'View User Profile',
-                'onclick': 'openProfile'
-            },
-            {
-                'icon': 'icon-location-pin',
-                'name': 'Flight Plan',
-                'label': 'View Flight Plan',
-                'onclick': 'openFlight'
-            },
-            {
-                "icon": "icon-chart",
-                "name": "Image Report",
-                "onclick": "openReport",
-                "label": "View Image Report"
-            } 
-        ]
-    }
-    updateNavigation(navigation_links)
-    
 // add semi-transparent logo
     var blank_html = '\
         <div id="center_middle" class="center-middle">\
@@ -477,6 +720,32 @@ function openDashboard() {
     $('.header-border').addClass('navbar-border')
     $('.header-border').addClass('navbar-accent')
 
+// toggle navigation
+    // add navigation links
+    var navigation_links = {
+        'links': [
+            {
+                'icon': 'icon-user',
+                'name': 'User Profile',
+                'label': 'View User Profile',
+                'onclick': 'openProfile'
+            },
+            {
+                'icon': 'icon-location-pin',
+                'name': 'Flight Plan',
+                'label': 'View Flight Plan',
+                'onclick': 'openFlight'
+            },
+            {
+                "icon": "icon-chart",
+                "name": "Image Report",
+                "onclick": "openReport",
+                "label": "View Image Report"
+            } 
+        ]
+    }
+    updateNavigation(navigation_links)
+    
 }
 
 function landingView() {
@@ -513,7 +782,7 @@ function landingView() {
 
 // add listener
     $(logo_button_id).click(function(){
-        openBlank()
+        openProfile()
     })
 
 }
@@ -684,7 +953,10 @@ var device_handlers = {
             }
             if (view == 'documentation'){
                 openDocumentation(section)
+            } else if (view == 'profile'){
+                openProfile(section)
             }
+            
             
     // default to landing view
         } else {
