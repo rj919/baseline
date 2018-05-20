@@ -48,10 +48,35 @@ landing_kwargs = {
 }
 landing_kwargs.update(**main_details)
 
+# import request and response dependencies
+from labpack.parsing.flask import extract_request_details
+from server.utils import construct_response
+
 @app.route('/')
 def landing_page():
     ''' landing page route '''
     return render_template('dashboard.html', **landing_kwargs), 200
+
+@app.route('/profile', methods=['GET','POST'])
+def profile_route():
+    ''' profile page route '''
+    request_details = extract_request_details(request)
+    app.logger.debug(request_details)
+    return jsonify({'status':'ok'}), 200
+
+@app.route('/flight', methods=['GET','POST'])
+def flight_route():
+    ''' flight page route '''
+    request_details = extract_request_details(request)
+    app.logger.debug(request_details)
+    return jsonify({'status':'ok'}), 200
+
+@app.route('/report', methods=['GET','POST'])
+def report_route():
+    ''' profile page route '''
+    request_details = extract_request_details(request)
+    app.logger.debug(request_details)
+    return jsonify({'status':'ok'}), 200
 
 @app.route('/api/v1')
 def api_v1_route():

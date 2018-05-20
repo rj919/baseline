@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
 # construct main details
     from labpack.records.settings import load_settings
-    main_details = load_settings('../assets/lab-main.json')
+    main_details = load_settings('../copy/main.json')
 
 # construct email client
     from labpack.email.mailgun import mailgunClient
@@ -69,7 +69,7 @@ if __name__ == '__main__':
             'recipient_list': [ main_details['contacts']['email'] ], 
             'sender_email': main_details['contacts']['noreply'],
             'sender_name': main_details['title'],
-            'email_subject': 'Alert for Your %s Account' % main_details['title'],
+            'email_subject': 'Thank You Enrolling in Travelers Home Insurance',
             'content_html': email_html
         }
         email_client.send_email(**email_kwargs)

@@ -13,16 +13,20 @@
             <div class="col-xs-6">
                 <div id="header_title" class="dashboard-view" style="display: none;">
                     <div class="navbar-title-24 navbar-center hidden-lg hidden-md hidden-sm">
-                        <div id="header_title_mobile_text" class="letterhead" title="{{ label }}">{{ title }}</div>
+                        <div id="header_title_mobile_text" class="letterhead" title="{{ label }}">{{ title }}</div><img id="title_mobile_logo" src="/public/images/baseline-logo-250.png" class="icon-sm padding-left-5">
                     </div>
                     <div id="header_title_desktop" class="navbar-title-24 navbar-start hidden-xs">
-                        <div id="header_title_desktop_text" class="letterhead" title="{{ label }}">{{ title }}</div>
+                        <div id="header_title_desktop_text" class="letterhead" title="{{ label }}">{{ title }}</div><img id="title_desktop_logo" src="/public/images/baseline-logo-250.png" class="icon-sm padding-left-5">
                     </div>
                 </div>
             </div>
             <div class="col-xs-3">
                 <div id="header_info" class="navbar-title-24 navbar-end landing-view" style="display: none;">
                     <a id="info_button" title="Mission" class="icon-question"></a>
+                </div>
+                <div class="navbar-title-24 navbar-end dashboard-view" style="display: none;">
+                    <div id="header_desktop" class="hidden-xs"></div>
+                    <div id="header_mobile" class="hidden-lg hidden-md hidden-sm"></div>
                 </div>
             </div>
         </div>
@@ -46,7 +50,10 @@
                 </div>
             </div>
         </div>
-        <div class="dashboard-view" style="display: none;"></div>
+        <div class="dashboard-view" style="display: none;">
+            <div id="footer_mobile" class="hidden-lg hidden-md hidden-sm"></div>
+            <div id="footer_desktop" class="hidden-xs"></div>
+        </div>
     </div>
 </div>
 <!-- Modal Dialogs Block -->

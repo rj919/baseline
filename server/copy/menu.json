@@ -8,16 +8,6 @@
     {
       "actions": [
         {
-          "icon": "icon-chart",
-          "name": "Report",
-          "onclick": "openReport",
-          "label": "View Data Report"
-        }
-      ]
-    },
-    {
-      "actions": [
-        {
           "icon": "icon-home",
           "name": "Policy Address",
           "onclick": "registerDialog",

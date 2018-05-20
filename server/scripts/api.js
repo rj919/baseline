@@ -243,6 +243,7 @@ function registerDialog() {
 // define submission function
     function _token_submit(input_value){
         localStorage.setItem('access_token', input_value)
+        openBlank()
         $(background_selector).click()
     }
     
@@ -365,9 +366,9 @@ function openReport(div_id='') {
     // replace title
         var title_kwargs = {
             app_title: window.app_title,
-            app_subtitle: 'Data Report',
-            page_title: 'Data Report',
-            page_label: 'View Data Report',
+            app_subtitle: 'Image Report',
+            page_title: window.app_title,
+            page_label: 'View Image Report',
             center_desktop: true
         }
         updateTitle(title_kwargs)
@@ -379,9 +380,11 @@ function openReport(div_id='') {
         toggleView(container_selector, container_html)
     
     // inject doc map
-        const doc_text = syntaxHighlight(JSON.stringify(doc_map, undefined, 2))
-        const doc_html = '<pre class="text-wrap pre-json">' + doc_text + '</pre>'
-        $(container_selector).html(doc_html)
+        if (doc_map){
+            const doc_text = syntaxHighlight(JSON.stringify(doc_map, undefined, 2))
+            const doc_html = '<pre class="text-wrap pre-json">' + doc_text + '</pre>'
+            $(container_selector).html(doc_html)
+        }
         
     // scroll to div
         scrollDiv(div_id)
@@ -391,12 +394,12 @@ function openReport(div_id='') {
 // retrieve api data
     var access_token = ingestString(localStorage.getItem('access_token'))
     requestingResource({
-        route: '/api/v1',
+        route: '/report',
         method: 'GET',
         params: { 'token': access_token }
     }).done(function(response){
         logConsole(response)
-        _open_report(response.schema)
+        _open_report()
     }).fail(function(error){
         errorDialog(error)
     })
@@ -420,10 +423,36 @@ function openBlank() {
     var container_html = '<div id="blank_container" class="container content-container-fill"></div>'
     toggleView(container_selector, container_html)
 
+// add navigation links
+    var navigation_links = {
+        'links': [
+            {
+                'icon': 'icon-user',
+                'name': 'User Profile',
+                'label': 'View User Profile',
+                'onclick': 'openProfile'
+            },
+            {
+                'icon': 'icon-location-pin',
+                'name': 'Flight Plan',
+                'label': 'View Flight Plan',
+                'onclick': 'openFlight'
+            },
+            {
+                "icon": "icon-chart",
+                "name": "Image Report",
+                "onclick": "openReport",
+                "label": "View Image Report"
+            } 
+        ]
+    }
+    updateNavigation(navigation_links)
+    
 // add semi-transparent logo
     var blank_html = '\
         <div id="center_middle" class="center-middle">\
-            <img src="/public/images/logo.svg" class="icon-landing font-watermark"></a>\
+            <img src="/public/images/baseline-logo-600.png" class="icon-landing font-watermark hidden-lg hidden-md hidden-sm">\
+            <img src="/public/images/baseline-logo-600.png" class="font-watermark hidden-xs">\
         </div>'
     $(container_selector).html(blank_html)
     
@@ -465,6 +494,9 @@ function landingView() {
         </div>'
     $(content_id).html(landing_html)
 
+// clear navigation
+    $('#header_desktop,#footer_mobile').empty()
+
 // toggle dashboard
     $('.dashboard-view').each(function(i){
         if ($(this).is(':visible')){
@@ -478,7 +510,7 @@ function landingView() {
     })
     $('.header-border').removeClass('navbar-border')
     $('.header-border').removeClass('navbar-accent')
-    
+
 // add listener
     $(logo_button_id).click(function(){
         openBlank()
@@ -526,16 +558,6 @@ var device_handlers = {
         // bind menu listeners
         menu_details = {
             "sections": [
-                {
-                  "actions": [
-                    {
-                      "icon": "icon-chart",
-                      "name": "Report",
-                      "onclick": "openReport",
-                      "label": "View Data Report"
-                    }
-                  ]
-                },
                 {
                   "actions": [
                     {
@@ -617,7 +639,7 @@ var device_handlers = {
     // set app details
         window.device_online = true
         window.system_environment = 'dev'
-        window.app_title = 'Collective Acuity'
+        window.app_title = 'Baseline'
         
     // set server url components
         window.server_protocol = location.protocol
