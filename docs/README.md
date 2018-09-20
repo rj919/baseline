@@ -15,6 +15,8 @@ Baseline will streamline claims and improve underwriting through advanced remote
 
 [Live Site](https://baselinehq.herokuapp.com?address=10%20Park%20Street%20New%20Canaan%2C%20CT%2006840)  
 
+[GitHub Repo](https://github.com/rj919/baseline)
+
 ## Components
 - Python 3.6 (Language)
 - Flask (Framework)
