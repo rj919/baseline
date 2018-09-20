@@ -13,8 +13,6 @@ Baseline will streamline claims and improve underwriting through advanced remote
 ## Project Materials
 [Slide Deck](https://docs.google.com/presentation/d/1Qdd8CGe7G5S-9OpA7RUKxXDXJ9A1_5KWQNy5NT6sb_c)
 
-[Demo Video](https://drive.google.com/file/d/1XxZnf8G-unbQdyDSqLJpRrD-g-3JYV2h)
-
 [Live Site](https://baselinehq.herokuapp.com?address=10%20Park%20Street%20New%20Canaan%2C%20CT%2006840)  
 
 ## Components
@@ -23,3 +21,13 @@ Baseline will streamline claims and improve underwriting through advanced remote
 - Random Forest (Modeling Technique)
 - Mailgun (Email Provider)  
 - Cheerwing Syma X5SW-V3 (Demo Drone)
+
+## Screenshots
+__Email:__  
+![Email](email.png)
+
+__Profile:__  
+![Profile](profile.png)  
+
+__Report:__  
+![Report](report.png)
