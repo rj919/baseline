@@ -49,9 +49,6 @@ landing_kwargs = {
 landing_kwargs.update(**main_details)
 
 # import request and response dependencies
-from os import listdir, path
-from hashlib import md5
-from labpack.records.settings import load_settings
 from labpack.parsing.flask import extract_request_details
 from server.utils import construct_response, retrieve_flightplan, update_flightplan
 
@@ -85,7 +82,6 @@ def profile_route():
             
     app.logger.debug(response_details)
     return jsonify(response_details), response_details['code']
-
 
 
 @app.route('/api/v1')

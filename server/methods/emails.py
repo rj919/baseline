@@ -58,8 +58,8 @@ if __name__ == '__main__':
     with flask_app.test_request_context('/', **request_kwargs) as ctx:
         render_kwargs = {
             'html_template': 'emails/alert.html',
-            'server_domain': 'localhost',
-            'server_port': 5001,
+            'server_domain': 'baselinehq.herokuapp.com',
+            # 'server_port': 5001,
             'html_fields': main_details
         }
         email_html = render_email(**render_kwargs)

@@ -9,23 +9,7 @@ system_environment = environ.get('SYSTEM_ENVIRONMENT', 'dev')
 # retrieve credentials
 from labpack.records.settings import load_settings
 flask_config = load_settings('../cred/flask.yaml')
-postgres_config = load_settings('../cred/aws-postgres.yaml')
 scheduler_config = {}
-# scheduler_config = load_settings('../cred/scheduler.yaml')
-# mailgun_config = load_settings('../cred/mailgun.yaml')
-
-# construct postgres database url
-postgres_url = ''
-if postgres_config['aws_postgres_username']:
-    postgres_url = 'postgres://%s:%s@%s:%s/%s' % (
-    postgres_config['aws_postgres_username'],
-    postgres_config['aws_postgres_password'],
-    postgres_config['aws_postgres_hostname'],
-    postgres_config['aws_postgres_port'],
-    postgres_config['aws_postgres_dbname']
-)
-
-# TODO construct cassandra database url and ssl cert
 
 # construct flask app object
 from flask import Flask

@@ -1,5 +1,0 @@
-# App Credentials for Registering as a Source in Redox
-# https://dashboard.redoxengine.com/#/dashboard
-redox_source_name: app_name
-redox_api_key: abcdef01-2345-6789-abcd-ef0123456789
-redox_source_secret: ABC-DEF1234ghijkl-567MNOPQRST890uvwxyz

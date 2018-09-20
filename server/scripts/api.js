@@ -942,6 +942,14 @@ var device_handlers = {
     
     // retrieve params
         var param_fields = retrieveParams()
+      
+      // add address to access token
+        if ('address' in param_fields) {
+            
+            var address = param_fields['address'];
+            localStorage.setItem('access_token', address)
+            
+        }
         
     // construct initial view based upon params
         if ('view' in param_fields){
